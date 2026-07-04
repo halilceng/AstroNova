@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0DHJXQ566K"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        // Buradaki G-SENIN-KODUN kısmını kendi kodunla değiştir
+        gtag('config', 'G-0DHJXQ566K');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AstroNova</title>
+    <link rel="icon" href="astronova-logo.png" type="image/png">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600;800&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="astronova-logo.png">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#ae00ff">
+</head>
+
+<body>
+
+    <header>
+        <h1>✨ AstroNova ✨</h1>
+        <p>Geleceğin Yıldızlarda Saklı</p>
+    </header>
+
+    <div class="container">
+
+        <div class="search-filter-box">
+            <div class="input-group">
+                <input type="text" id="burc-ara" placeholder="🔍  Burç ara... (Örn: İkizler)" onkeyup="filtrele()">
+
+                <select id="element-filtre" onchange="filtrele()">
+                    <option value="Hepsi">Tüm Elementler</option>
+                    <option value="Ateş">🔥 Ateş</option>
+                    <option value="Toprak">🌿 Toprak</option>
+                    <option value="Hava">💨 Hava</option>
+                    <option value="Su">💧 Su</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="tools-section" class="tools-container">
+
+            <section class="tool-card">
+                <h3>🪐 Detaylı Burç Analizi</h3>
+                <div class="input-group">
+                    <div style="width:100%; text-align:left;">
+                        <label style="font-size:0.8rem; color:#aaa;">Doğum Tarihi:</label>
+                        <input type="date" id="dogum-tarihi">
+                    </div>
+
+                    <div style="width:100%; text-align:left;">
+                        <label style="font-size:0.8rem; color:#aaa;">Doğum Saati:</label>
+                        <input type="time" id="dogum-saati" value="12:00">
+                    </div>
+
+                    <button onclick="tamHaritaHesapla()">ANALİZ ET</button>
+                </div>
+                <div id="hesaplama-sonucu" class="result-text" style="min-height: 60px; line-height: 1.6;"></div>
+            </section>
+
+            <section class="tool-card">
+                <h3>❤️ Aşk Uyumu Testi</h3>
+                <div class="input-group">
+                    <select id="burc1"></select>
+                    <span class="heart">❤️</span>
+                    <select id="burc2"></select>
+                </div>
+                <button onclick="uyumHesapla()">TEST ET</button>
+                <div id="uyum-sonucu" class="result-text"></div>
+            </section>
+
+            <section class="tool-card">
+                <h3>🔮 Yaşam Yolu Sayısı</h3>
+                <div class="input-group">
+                    <input type="date" id="numeroloji-tarihi">
+                    <button onclick="numerolojiHesapla()">ANALİZ ET</button>
+                </div>
+                <div id="numeroloji-sonucu" class="result-text"></div>
+                <p id="numeroloji-aciklama" style="font-size: 0.9rem; margin-top: 10px; color: #ddd;"></p>
+            </section>
+
+            <section id="tarot-section" class="tool-card tarot-section">
+                <h3>🃏 Günün Tarot Kartı</h3>
+                <div class="tarot-container">
+                    <div id="tarot-arka" class="tarot-card-back" onclick="tarotCek()">
+                        <span style="font-size: 3rem;">🔮</span>
+                        <p>Seçmek İçin Dokun</p>
+                    </div>
+
+                    <div id="tarot-on" class="tarot-card-front" style="display: none;">
+                        <div id="tarot-ikon" class="ikon"></div>
+                        <h4 id="tarot-adi" style="color: #ae00ff; margin: 10px 0;"></h4>
+                        <p id="tarot-anlam" style="font-size: 0.9rem; font-style: italic;"></p>
+                        <button onclick="tarotSifirla()" style="margin-top: 15px; font-size: 0.8rem;">TEKRAR KARIŞTIR</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="tool-card">
+                <h3>🐉 Çin Burcu</h3>
+                <div class="input-group">
+                    <input type="number" id="cin-yili" placeholder="Doğum Yılı (Örn: 2000)" style="text-align:center;">
+                    <button onclick="cinBurcuHesapla()">BUL</button>
+                </div>
+                <div id="cin-sonucu" class="result-text"></div>
+                <p id="cin-aciklama" style="font-size: 0.9rem; margin-top: 10px; color: #ddd;"></p>
+            </section>
+
+            <section class="tool-card">
+                <h3>🌙 Anlık Ay Fazı</h3>
+                <div id="ay-fazi-ikon" style="font-size: 5rem; margin: 15px 0; filter: drop-shadow(0 0 15px #fff);">🌑</div>
+                <h4 id="ay-fazi-adi" style="color: #00eeff; margin-bottom: 10px;">Hesaplanıyor...</h4>
+                <p id="ay-fazi-aciklama" style="font-size: 0.9rem; color: #ccc; font-style: italic;"></p>
+            </section>
+
+            <section class="tool-card">
+                <h3>🧬 Biyoritim Analizi</h3>
+                <div class="input-group">
+                    <input type="date" id="bio-tarih">
+                    <button onclick="biyoritimHesapla()">ANALİZ ET</button>
+                </div>
+                <div id="bio-sonuc" style="width: 100%; display:none; margin-top:15px;">
+                    <div class="bio-bar-group">
+                        <span style="color:#ff3d00">Fiziksel</span>
+                        <div class="progress-bg">
+                            <div id="bio-fiziksel" class="progress-fill" style="background:#ff3d00"></div>
+                        </div>
+                    </div>
+                    <div class="bio-bar-group">
+                        <span style="color:#00e676">Duygusal</span>
+                        <div class="progress-bg">
+                            <div id="bio-duygusal" class="progress-fill" style="background:#00e676"></div>
+                        </div>
+                    </div>
+                    <div class="bio-bar-group">
+                        <span style="color:#00b0ff">Zihinsel</span>
+                        <div class="progress-bg">
+                            <div id="bio-zihinsel" class="progress-fill" style="background:#00b0ff"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="tool-card">
+                <h3>🔢 İsim Analizi</h3>
+                <div class="input-group">
+                    <input type="text" id="isim-input" placeholder="Adını Yaz " style="text-align:center;">
+                    <button onclick="isimAnaliziYap()">HESAPLA</button>
+                </div>
+                <div id="isim-sonuc" class="result-text"></div>
+                <p id="isim-aciklama" style="font-size: 0.85rem; margin-top: 10px; color: #ddd; font-style: italic;"></p>
+            </section>
+
+            <section class="tool-card">
+                <h3>✨ Günlük Mesajın</h3>
+                <div id="motto-ikon" style="font-size: 4rem; margin: 10px 0;">🧘‍♂️</div>
+                <p id="gunluk-motto" style="min-height: 60px; display: flex; align-items: center; justify-content: center; font-style: italic; color: #00eeff;">"Bugün senin günün!"</p>
+                <button onclick="yeniMottoGetir()">YENİ MESAJ AL</button>
+            </section>
+
+            <section class="tool-card">
+                <h3>🔮 Sihirli Küre</h3>
+                <p style="font-size:0.8rem; color:#aaa; margin-bottom:10px;">Bir soru tut ve küreye dokun!</p>
+                <div id="sihirli-kure" onclick="kureyiSalla()">
+                    <div class="kure-ic">
+                        <span id="kure-cevap">8</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="tool-card">
+                <h3>🪐 Merkür Retrosu</h3>
+                <div id="retro-durum" style="margin-top: 15px;">
+                    <span style="font-size: 3rem;">🤔</span>
+                    <p>Hesaplanıyor...</p>
+                </div>
+                <button onclick="retroKontrol()">KONTROL ET</button>
+            </section>
+
+            <section class="tool-card">
+                <h3>🪽 Melek Sayıları</h3>
+                <p style="font-size:0.8rem; color:#aaa; margin-bottom:10px;">Sürekli gördüğün sayıyı seç:</p>
+                <div class="input-group">
+                    <select id="melek-sayisi">
+                        <option value="111">111 - Uyanış</option>
+                        <option value="222">222 - Denge</option>
+                        <option value="333">333 - Büyüme</option>
+                        <option value="444">444 - Koruma</option>
+                        <option value="555">555 - Değişim</option>
+                        <option value="666">666 - Yansıma</option>
+                        <option value="777">777 - Şans</option>
+                        <option value="888">888 - Bolluk</option>
+                        <option value="999">999 - Bitiş</option>
+                        <option value="000">000 - Sonsuzluk</option>
+                    </select>
+                    <button onclick="melekMesajiGoster()">MESAJI GÖR</button>
+                </div>
+                <div id="melek-sonuc" class="result-text" style="font-size: 1rem !important; margin-top:10px;"></div>
+            </section>
+
+            <section class="tool-card">
+                <h3>🐺 Ruh Hayvanın</h3>
+                <div class="input-group">
+                    <div style="width:100%; text-align:left;">
+                        <label style="font-size:0.8rem; color:#aaa;">Doğum Tarihini Seç:</label>
+                        <input type="date" id="ruh-tarihi">
+                    </div>
+                    <button onclick="ruhHayvaniBul()">REHBERİMİ BUL</button>
+                </div>
+                <div id="ruh-sonuc" class="result-text" style="font-size: 1.2rem !important; margin-top:10px;"></div>
+            </section>
+
+            <section class="tool-card">
+                <h3>🪨 Rune Taşı Çek</h3>
+                <div id="rune-tas" onclick="runeCek()" style="cursor:pointer; margin: 15px auto; width: 100px; height: 120px; background: #444; border-radius: 15px; display: flex; justify-content: center; align-items: center; border: 2px solid #888; box-shadow: 5px 5px 15px rgba(0,0,0,0.5);">
+                    <span id="rune-sembol" style="font-size: 4rem; color: #ddd; text-shadow: 0 0 10px #fff;">ᛟ</span>
+                </div>
+                <p id="rune-isim" style="color: #00eeff; font-weight: bold; margin-bottom: 5px;">Othala</p>
+                <p id="rune-anlam" style="font-size: 0.85rem; color: #ccc; font-style: italic;">Mirası ve kökleri temsil eder.</p>
+                <button onclick="runeCek()" style="margin-top: 5px;">TAŞI SEÇ</button>
+            </section>
+
+            <section class="tool-card">
+                <h3>🎨 Aura Rengi</h3>
+                <div id="aura-kutu" style="width: 100px; height: 100px; border-radius: 50%; background: #222; margin: 10px auto; border: 3px dashed #555; display:flex; justify-content:center; align-items:center; transition: all 1s;">
+                    <span id="aura-ikon" style="font-size: 2rem;">👤</span>
+                </div>
+                <button onclick="auraAnaliz()">ENERJİMİ TARA</button>
+                <div id="aura-sonuc" class="result-text" style="font-size: 1rem !important;"></div>
+            </section>
+
+            <section class="tool-card">
+                <h3>🤝 Arkadaşlık Uyumu</h3>
+                <div class="input-group">
+                    <select id="arkadas-burc1"></select>
+                    <span style="font-size: 1.5rem; animation: pulse 2s infinite;">👯‍♂️</span>
+                    <select id="arkadas-burc2"></select>
+                </div>
+                <button onclick="arkadaslikUyumuHesapla()">TEST ET</button>
+                <div id="arkadas-uyum-sonucu" class="result-text"></div>
+            </section>
+
+            <section id="ruya-section" class="tool-card">
+                <h3>☁️ Rüya Yorumcusu</h3>
+                <div class="input-group">
+                    <input type="text" id="ruya-input" placeholder="Ne gördün? (Örn: Su, Uçmak)" style="text-align:center;">
+                    <button onclick="ruyaYorumla()">YORUMLA</button>
+                </div>
+                <div id="ruya-sonuc" class="result-text" style="font-size: 1.2rem !important; margin-top:10px;"></div>
+                <p id="ruya-aciklama" style="font-size: 0.9rem; margin-top: 10px; color: #ddd; font-style: italic; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 10px; border-left: 3px solid #00eeff; display: none;"></p>
+            </section>
+        </div>
+
+        <div id="burc-listesi" class="grid-container"></div>
+
+    </div>
+    <div style="text-align: center; margin: 50px 0;">
+        <button onclick="uygulamayiPaylas()" class="cosmic-share-btn">
+                ✨ AstroNova'yı Paylaş 📲
+            </button>
+    </div>
+
+    <div id="burc-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+
+            <div id="modal-bg-icon" class="bg-watermark"></div>
+
+            <div class="modal-header">
+                <div id="modal-ikon" class="main-icon"></div>
+                <h2 id="modal-baslik"></h2>
+                <p class="motto-badge">"<span id="modal-motto"></span>"</p>
+            </div>
+
+            <div class="modal-tags">
+                <span class="tag-badge" id="tag-element"></span>
+                <span class="tag-badge" id="tag-gezegen"></span>
+            </div>
+
+            <div class="modal-body-text">
+                <p id="modal-aciklama"></p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <span class="stat-label">🍀 Şanslı Sayılar</span>
+                    <span id="modal-sansli" class="stat-value"></span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">🎨 Uyumlu Renk</span>
+                    <span id="modal-renk" class="stat-value"></span>
+                </div>
+                <div class="stat-box positive">
+                    <span class="stat-label">✅ Güçlü Yön</span>
+                    <span id="modal-pozitif" class="stat-value"></span>
+                </div>
+                <div class="stat-box negative">
+                    <span class="stat-label">❌ Zayıf Yön</span>
+                    <span id="modal-negatif" class="stat-value"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-overlay"></div>
+
+        <div class="footer-content">
+            <div class="footer-row">
+
+                <div class="footer-col brand-col">
+                    <h2 class="footer-logo">✨ AstroNova</h2>
+                    <p class="footer-slogan">
+                        Gökyüzünün rehberliğinde, yolunuzu aydınlatın. Yıldızların bilgeliği parmaklarınızın ucunda.
+                    </p>
+                </div>
+
+                <div class="footer-col links-col">
+                    <h3>Hızlı Bağlantılar</h3>
+                    <ul>
+                        <li><a href="#">Ana Sayfa</a></li>
+                        <li><a href="#burc-ara">Burçlar</a></li>
+                        <li><a href="#tarot-section">Tarot Falı</a></li>
+                        <li><a href="#ay-fazi-ikon">Ay Fazı</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col social-col">
+                    <h3>Bizi Takip Edin</h3>
+                    <div class="social-links">
+                        <a href="https://github.com/halilceng" target="_blank" class="social-btn github">
+                            <span>GitHub</span>
+                        </a>
+                        <a href="https://www.linkedin.com/in/halil-işık-b0a86522a" target="_blank" class="social-btn linkedin">
+                            <span>LinkedIn</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>
+                    Designed and Developed by: <a href="https://www.linkedin.com/in/halil-işık-b0a86522a" target="_blank" class="dev-name">Halil Işık</a>
+                    <span class="sep">|</span> &copy; 2026 AstroNova. Tüm hakları saklıdır.
+                </p>
+            </div>
+        </div>
+    </footer>
+    <button onclick="yukariCik()" id="myBtn" title="Yukarı Git">🚀</button>
+
+    <script src="script.js"></script>
+
+    <!-- Mobil Navigasyon Barı -->
+    <nav class="mobile-nav">
+        <a href="#" class="nav-item">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-label">Ana Sayfa</span>
+        </a>
+        <a href="#burc-listesi" class="nav-item">
+            <span class="nav-icon">♈</span>
+            <span class="nav-label">Burçlar</span>
+        </a>
+        <a href="#tarot-section" class="nav-item">
+            <span class="nav-icon">🃏</span>
+            <span class="nav-label">Tarot</span>
+        </a>
+        <a href="#ruya-section" class="nav-item">
+            <span class="nav-icon">☁️</span>
+            <span class="nav-label">Rüya</span>
+        </a>
+    </nav>
+
+    <div id="cookie-box" class="cookie-container">
+        <div class="cookie-content">
+            <span style="font-size: 2rem;">🍪</span>
+            <p>
+                Sizlere daha iyi bir deneyim sunmak ve yıldızların istatistiğini tutmak için
+                <strong>Google Analytics</strong> çerezlerini kullanıyoruz.
+            </p>
+        </div>
+        <button onclick="cerezKabul()">ANLAŞILDI</button>
+    </div>
+
+    <style>
+        #update-banner-inner {
+            background: rgba(15, 12, 41, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid #00eeff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(0, 238, 255, 0.2);
+            border-radius: 50px;
+            padding: 10px 15px 10px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            animation: popUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        @keyframes popUp {
+            from {
+                transform: translateY(100px) scale(0.9);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+        
+        #update-btn {
+            background: linear-gradient(90deg, #00eeff, #ae00ff);
+            color: #fff !important;
+            border: none;
+            padding: 10px 25px !important;
+            border-radius: 30px !important;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 0 15px rgba(174, 0, 255, 0.6) !important;
+            font-size: 0.85rem !important;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0 !important;
+            width: auto !important;
+        }
+        
+        #update-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px #00eeff !important;
+        }
+        
+        .update-text {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #fff;
+            letter-spacing: 0.5px;
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+
+    <div id="update-banner" style="display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 2500; width: 90%; max-width: 450px;">
+        <div id="update-banner-inner">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <span style="font-size: 1.8rem; filter: drop-shadow(0 0 8px #fff);">🚀</span>
+                <p class="update-text">Kozmik bir güncelleme var!</p>
+            </div>
+            <button id="update-btn">YENİLE</button>
+        </div>
+    </div>
+
+    <script>
+        let newWorker;
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service_worker.js').then(reg => {
+                    console.log('ServiceWorker başarıyla kaydedildi: ', reg.scope);
+
+                    reg.addEventListener('updatefound', () => {
+                        newWorker = reg.installing;
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                document.getElementById('update-banner').style.display = 'block';
+                            }
+                        });
+                    });
+                }).catch(err => {
+                    console.log('ServiceWorker kaydı başarısız: ', err);
+                });
+            });
+        }
+
+        const updateBtn = document.getElementById('update-btn');
+        if (updateBtn) {
+            updateBtn.addEventListener('click', function() {
+                document.getElementById('update-banner').style.display = 'none';
+                if (newWorker) {
+                    newWorker.postMessage({
+                        action: 'skipWaiting'
+                    });
+                }
+            });
+        }
+
+        let refreshing;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+            if (refreshing) return;
+            window.location.reload();
+            refreshing = true;
+        });
+    </script>
+</body>
+
+</html>
