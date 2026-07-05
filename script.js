@@ -1014,9 +1014,7 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
-// Yapay Zeka ile Rüya Yorumlama Fonksiyonu (Frontend-Only sürüm)
-const GEMINI_API_KEY = "AIzaSyDmGDpZVU8TYDpdeq9IBO0aIrdQDBoS8cw";
-
+// Yapay Zeka ile Rüya Yorumlama Fonksiyonu (Flask Backend üzerinden güvenli sürüm)
 async function ruyaYorumla() {
     const inputStr = document.getElementById('ruya-input').value.trim();
     const sonucDiv = document.getElementById('ruya-sonuc');
@@ -1032,38 +1030,33 @@ async function ruyaYorumla() {
     sonucDiv.innerHTML = `<span style="color: #00eeff; font-size: 1rem; animation: pulse 1.5s infinite;">✨ Yıldızlara soruluyor...</span>`;
     aciklamaDiv.style.display = "none";
 
-    const prompt = `Sen mistik, bilge ve spiritüel bir rüya tabircisisin. Kullanıcının sana anlattığı şu rüyayı astrolojik ve gizemli bir dille, maksimum 2-3 cümleyle yorumla. Rüya: '${inputStr}'`;
-
     try {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
+        const url = "http://localhost:5000/api/ruya-yorumla";
         
         const response = await fetch(url, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-App-Source': 'AstroNova' // Yetkisiz kaynakları engellemek için özel başlık
             },
             body: JSON.stringify({
-                contents: [{
-                    parts: [{
-                        text: prompt
-                    }]
-                }]
+                ruya: inputStr
             })
         });
 
         const data = await response.json();
 
         if (response.ok) {
-            const yorum = data.candidates[0].content.parts[0].text;
+            const yorum = data.yorum;
             sonucDiv.innerHTML = `<span style="color: #ae00ff; text-shadow: 0 0 10px #ae00ff;">✨ Kozmik Mesaj ✨</span>`;
             aciklamaDiv.innerHTML = yorum;
             aciklamaDiv.style.display = "block";
         } else {
-            const hataMesaji = data.error ? data.error.message : "Bilinmeyen bir hata oluştu.";
+            const hataMesaji = data.hata || "Bilinmeyen bir hata oluştu.";
             sonucDiv.innerHTML = `<span style="color: #ff1744; font-size:1rem;">Hata: ${hataMesaji}</span>`;
         }
     } catch (error) {
-        sonucDiv.innerHTML = `<span style="color: #ff1744; font-size:1rem;">Mistik frekans koptu (İnternet bağlantınızı kontrol edin).</span>`;
+        sonucDiv.innerHTML = `<span style="color: #ff1744; font-size:1rem;">Mistik frekans koptu (Sunucunun açık olduğundan emin olun).</span>`;
         console.error("API Hatası:", error);
     }
 }

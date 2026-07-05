@@ -3,7 +3,10 @@ import json
 
 url = "http://localhost:5000/api/ruya-yorumla"
 payload = {"ruya": "Denizde mavi bir balina gördüm."}
-headers = {"Content-Type": "application/json"}
+headers = {
+    "Content-Type": "application/json",
+    "X-App-Source": "AstroNova"
+}
 
 try:
     response = requests.post(url, json=payload, headers=headers)
